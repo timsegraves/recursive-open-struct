@@ -9,7 +9,7 @@ class RecursiveOpenStruct < OpenStruct
   end
 
   def new_ostruct_member(name)
-    name = name.underscore if @underscore_keys
+    name = underscore(name) if @underscore_keys
     name = name.to_sym
     unless self.respond_to?(name)
       class << self; self; end.class_eval do
@@ -64,6 +64,14 @@ class RecursiveOpenStruct < OpenStruct
     end
 
     true
+  end
+
+  def underscore
+    self.gsub(/::/, '/').
+    gsub(/([A-Z]+)([A-Z][a-z])/,'\1_\2').
+    gsub(/([a-z\d])([A-Z])/,'\1_\2').
+    tr("-", "_").
+    downcase
   end
 
 end
