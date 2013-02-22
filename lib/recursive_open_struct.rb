@@ -4,10 +4,12 @@ class RecursiveOpenStruct < OpenStruct
 
   def initialize(h=nil, args={})
     @recurse_over_arrays = args.fetch(:recurse_over_arrays,false)
+    @underscore_keys = args.fetch(:underscore_keys, false)
     super(h)
   end
 
   def new_ostruct_member(name)
+    name = name.underscore if @underscore_keys
     name = name.to_sym
     unless self.respond_to?(name)
       class << self; self; end.class_eval do
